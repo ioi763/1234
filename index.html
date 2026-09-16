@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人作品集與學習歷程 | Personal Portfolio</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入獨立 CSS 檔案 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 導覽列 -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">Portfolio.</a>
+            <ul class="nav-links">
+                <li><a href="#hero">關於我</a></li>
+                <li><a href="#projects">專案成果</a></li>
+                <li><a href="#skills">技能經歷</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 個人簡介 Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <img src="https://via.placeholder.com/140" alt="個人頭像" class="hero-avatar">
+            <h1 class="hero-name">Your Name</h1>
+            <p class="hero-tagline">跨領域學習者 | 傳播企劃 / 數位內容創作 / 專案管理</p>
+            <p class="hero-bio">
+                歡迎來到我的學習歷程與成果展示網站。這裡記錄了我的專案成長歷程，包含品牌敘事、媒體企劃與影音視覺實作。
+            </p>
+            <div class="social-links">
+                <a href="https://github.com" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:your-email@example.com" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 專案與成果展示 Portfolio Section -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">專案與成果展示</h2>
+            
+            <!-- 分類篩選按鈕 -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">全部作品</button>
+                <button class="filter-btn" data-filter="capstone">畢業專題</button>
+                <button class="filter-btn" data-filter="media">媒體企劃/品牌</button>
+                <button class="filter-btn" data-filter="design">影音視覺</button>
+            </div>
+
+            <!-- 作品卡片列表 -->
+            <div class="portfolio-grid">
+
+                <!-- 專案卡片 1 -->
+                <div class="portfolio-card" data-category="capstone" 
+                     data-title="畢業專題：數位傳播與社群策略分析" 
+                     data-desc="本專題深入探討數位媒體時代下品牌轉型與消費者溝通之策略，結合數據分析與內容行銷企劃，建立完整的社群影響力模型。" 
+                     data-img="https://via.placeholder.com/600x300">
+                    <img src="https://via.placeholder.com/400x250" alt="專案縮圖" class="card-img">
+                    <div class="card-body">
+                        <span class="card-tag">畢業專題</span>
+                        <h3 class="card-title">數位傳播與社群策略分析</h3>
+                        <p class="card-desc">探討品牌轉型與消費者溝通策略，結合數據分析與內容行銷。</p>
+                    </div>
+                </div>
+
+                <!-- 專案卡片 2 -->
+                <div class="portfolio-card" data-category="media" 
+                     data-title="品牌轉型與溝通策略研究" 
+                     data-desc="分析知名品牌如何透過視覺傳播與社群題材轉型為潮流焦點，並探討代言與大眾認知的互動關係。" 
+                     data-img="https://via.placeholder.com/600x300">
+                    <img src="https://via.placeholder.com/400x250" alt="專案縮圖" class="card-img">
+                    <div class="card-body">
+                        <span class="card-tag">媒體企劃/品牌</span>
+                        <h3 class="card-title">品牌轉型與溝通策略研究</h3>
+                        <p class="card-desc">分析傳統品牌如何透過視覺傳播與社群題材轉型為潮流焦點。</p>
+                    </div>
+                </div>
+
+                <!-- 專案卡片 3 -->
+                <div class="portfolio-card" data-category="design" 
+                     data-title="影音剪輯與視覺敘事專案" 
+                     data-desc="運用鏡頭語言與後製剪輯技巧，打造具備情感共鳴的短片與視覺內容，嘗試數位媒體多元格式表達。" 
+                     data-img="https://via.placeholder.com/600x300">
+                    <img src="https://via.placeholder.com/400x250" alt="專案縮圖" class="card-img">
+                    <div class="card-body">
+                        <span class="card-tag">影音視覺</span>
+                        <h3 class="card-title">影音剪輯與視覺敘事專案</h3>
+                        <p class="card-desc">結合後製剪輯與視覺設計，製作多元數位內容短片。</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 技能與經歷 Skills & Experience -->
+    <section id="skills" class="bg-white">
+        <div class="container">
+            <h2 class="section-title">技能與歷程</h2>
+            <div class="experience-container">
+                
+                <!-- 核心技能 -->
+                <div>
+                    <h3 class="sub-title">Core Skills</h3>
+                    <div class="skills-list">
+                        <span class="skill-item">專案企劃與執行</span>
+                        <span class="skill-item">數位媒體敘事</span>
+                        <span class="skill-item">基礎影音剪輯 (Premiere/CapCut)</span>
+                        <span class="skill-item">視覺傳達與排版</span>
+                        <span class="skill-item">社群趨勢分析</span>
+                        <span class="skill-item">HTML / CSS / JS 基礎</span>
+                    </div>
+                </div>
+
+                <!-- 大學歷程/經歷 -->
+                <div>
+                    <h3 class="sub-title">Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">2026 - Present</div>
+                            <div class="timeline-title">畢業專題製作中</div>
+                            <p class="timeline-desc">進行大四畢業專題研討與成果展籌備。</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2025 - 2026</div>
+                            <div class="timeline-title">社團幹部 / 展演器材與財務管理</div>
+                            <p class="timeline-desc">負責團隊資產維護、預算審核與大型活動現場協調。</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024</div>
+                            <div class="timeline-title">跨領域自主學習與研究</div>
+                            <p class="timeline-desc">完成品牌溝通與視覺傳達專題報告。</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal 彈出視窗 -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <img id="modalImg" src="" alt="專案圖片">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDesc"></p>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Personal Portfolio. Built with HTML, CSS, and JavaScript. Hosted on GitHub Pages.</p>
+        </div>
+    </footer>
+
+    <!-- 引入獨立 JavaScript 檔案 -->
+    <script src="script.js"></script>
+</body>
+</html>
