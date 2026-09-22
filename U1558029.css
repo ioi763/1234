@@ -1,246 +1,60 @@
-/* ==========================================================================
-全域變數與基本重置 (Design Tokens & Reset)
-========================================================================== */
-:root {
---bg-main: #0b0f19;
---card-bg: #151c2e;
---text-title: #ffffff;
---text-muted: #94a3b8;
---accent-blue: #38bdf8;
---accent-glow: rgba(56, 189, 248, 0.4);
---border-color: rgba(255, 255, 255, 0.1);
---radius-main: 16px;
---transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* STREAMING_CHUNK:Setting global page typography and alignment... */
 
 {
+box-sizing: border-box;
 margin: 0;
 padding: 0;
-box-sizing: border-box;
 }
 
 body {
-background-color: var(--bg-main);
-color: var(--text-title);
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-min-height: 100vh;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color: #f4f4f9;
+color: #333;
 display: flex;
 flex-direction: column;
-overflow-x: hidden;
+align-items: center;
+min-height: 100vh;
+padding: 2rem;
 }
 
-/* ==========================================================================
-頁首樣式 (Header Section)
-========================================================================== */
-.header-section {
-text-align: center;
-padding: 4rem 1.5rem 2rem;
-background: radial-gradient(ellipse at top, rgba(56, 189, 248, 0.12), transparent 70%);
+header h1 {
+margin-bottom: 2rem;
+font-weight: 300;
+letter-spacing: 1px;
 }
 
-.header-content {
-max-width: 750px;
-margin: 0 auto;
-}
-
-.badge {
-display: inline-block;
-padding: 0.35rem 0.9rem;
-background: rgba(56, 189, 248, 0.1);
-border: 1px solid rgba(56, 189, 248, 0.3);
-color: var(--accent-blue);
-border-radius: 50px;
-font-size: 0.85rem;
-font-weight: 600;
-margin-bottom: 1rem;
-letter-spacing: 0.5px;
-}
-
-.header-section h1 {
-font-size: clamp(2rem, 4vw, 3rem);
-font-weight: 800;
-margin-bottom: 0.75rem;
-background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-}
-
-.header-section p {
-color: var(--text-muted);
-font-size: 1.05rem;
-line-height: 1.6;
-}
-
-/* ==========================================================================
-藝廊網格配置 (Gallery Grid Layout)
-========================================================================== */
-.gallery-wrapper {
-max-width: 1200px;
-margin: 0 auto;
-padding: 2rem 1.5rem 4rem;
-width: 100%;
-flex: 1;
-}
-
-.gallery-grid {
+/* STREAMING_CHUNK:Configuring gallery layout and responsive grid... */
+.gallery {
 display: grid;
-grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-gap: 2rem;
-}
-
-/* ==========================================================================
-圖片卡片與滑鼠移過動畫 (Rules 4 & 5: CSS Hover Animations & Links)
-========================================================================== */
-.card-item {
-display: block;
-text-decoration: none;
-color: inherit;
-border-radius: var(--radius-main);
-background-color: var(--card-bg);
-border: 1px solid var(--border-color);
-overflow: hidden;
-position: relative;
-box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-transition: var(--transition-smooth);
-cursor: pointer;
-}
-
-.image-box {
-position: relative;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 1.5rem;
 width: 100%;
-height: 380px;
-overflow: hidden;
+max-width: 1100px;
 }
 
-.image-box img {
+/* STREAMING_CHUNK:Applying hover scale animation and styling cards... */
+.gallery-item {
+display: block;
+overflow: hidden;
+border-radius: 8px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+transition: box-shadow 0.3s ease;
+}
+
+.gallery-item img {
 width: 100%;
 height: 100%;
 object-fit: cover;
 display: block;
-filter: brightness(0.9) contrast(1.05);
-/* 滑鼠離開時的流暢還原動畫 */
-transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+/* 懸停動畫縮放設定 */
+transition: transform 0.3s ease;
 }
 
-.overlay {
-position: absolute;
-inset: 0;
-background: linear-gradient(
-to top,
-rgba(11, 15, 25, 0.95) 0%,
-rgba(11, 15, 25, 0.4) 50%,
-transparent 100%
-);
-display: flex;
-flex-direction: column;
-justify-content: flex-end;
-padding: 1.75rem;
-transition: var(--transition-smooth);
+/* 懸停時圖片放大與陰影加深效果 */
+.gallery-item:hover img {
+transform: scale(1.08);
 }
 
-.tag {
-font-size: 0.75rem;
-font-weight: 700;
-color: var(--accent-blue);
-text-transform: uppercase;
-letter-spacing: 1.5px;
-margin-bottom: 0.4rem;
-transform: translateY(12px);
-transition: var(--transition-smooth);
-}
-
-.overlay h2 {
-font-size: 1.35rem;
-font-weight: 700;
-margin-bottom: 0.4rem;
-color: var(--text-title);
-transform: translateY(12px);
-transition: var(--transition-smooth);
-}
-
-.overlay p {
-font-size: 0.9rem;
-color: var(--text-muted);
-margin-bottom: 1rem;
-transform: translateY(15px);
-opacity: 0.85;
-transition: var(--transition-smooth);
-}
-
-.btn-text {
-display: inline-flex;
-align-items: center;
-font-size: 0.85rem;
-font-weight: 600;
-color: var(--accent-blue);
-transform: translateY(15px);
-opacity: 0;
-transition: var(--transition-smooth);
-}
-
-/* --------------------------------------------------
-🔥 純 CSS 滑鼠 Hover 動畫效果 (無 Java / JavaScript)
--------------------------------------------------- */
-
-/* 1. 卡片向上浮起、微幅放大並產生發光外陰影 */
-.card-item:hover {
-transform: translateY(-10px) scale(1.02);
-border-color: var(--accent-blue);
-box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.7), 0 0 20px var(--accent-glow);
-}
-
-/* 2. 圖片放大與微幅旋轉效果 */
-.card-item:hover .image-box img {
-transform: scale(1.1) rotate(0.8deg);
-filter: brightness(1) contrast(1.1);
-}
-
-/* 3. 暗色漸層背景加深以凸顯文字 */
-.card-item:hover .overlay {
-background: linear-gradient(
-to top,
-rgba(11, 15, 25, 0.98) 0%,
-rgba(11, 15, 25, 0.5) 60%,
-rgba(56, 189, 248, 0.08) 100%
-);
-}
-
-/* 4. 遮罩文字與按鈕向上升起並完全顯示 */
-.card-item:hover .tag,
-.card-item:hover .overlay h2,
-.card-item:hover .overlay p,
-.card-item:hover .btn-text {
-transform: translateY(0);
-opacity: 1;
-}
-
-/* ==========================================================================
-頁尾樣式 (Footer Section)
-========================================================================== */
-.footer-section {
-text-align: center;
-padding: 2rem 1.5rem;
-background-color: #080b12;
-border-top: 1px solid var(--border-color);
-color: var(--text-muted);
-font-size: 0.875rem;
-}
-
-/* ==========================================================================
-響應式螢幕適應 (Responsive Design)
-========================================================================== */
-@media (max-width: 640px) {
-.gallery-grid {
-grid-template-columns: 1fr;
-}
-
-.image-box {
-    height: 320px;
-}
-
-.header-section {
-    padding: 3rem 1rem 1.5rem;
-}
-
-
+.gallery-item:hover {
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
