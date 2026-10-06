@@ -1,0 +1,75 @@
+/*
+
+STREAMING_CHUNK:External CSS theme variable defaults and custom extensions...
+
+LUXE PARFUM - External Custom Luxury Style Sheet (style.css)
+*/
+
+:root {
+--color-obsidian: #0D0D0E;
+--color-charcoal: #1A1A1C;
+--color-surface: #242428;
+--color-gold-light: #FAF4E5;
+--color-gold: #D4AF37;
+--color-gold-dark: #997A15;
+--color-champagne: #F7F3EB;
+}
+
+body {
+background-color: var(--color-obsidian);
+color: var(--color-champagne);
+font-family: 'Inter', system-ui, -apple-system, sans-serif;
+overflow-x: hidden;
+}
+
+/* Custom Editorial Serif Typography */
+.font-serif-title {
+font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Gold Gradient Text Filter */
+.gold-gradient-text {
+background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 50%, var(--color-gold-dark) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+/* Buttons and Micro Interactions */
+.gold-btn {
+background: linear-gradient(135deg, #D4AF37 0%, #AA820A 100%);
+color: #0D0D0E;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gold-btn:hover {
+background: linear-gradient(135deg, #E6C875 0%, #D4AF37 100%);
+box-shadow: 0 0 25px rgba(212, 175, 55, 0.45);
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+background: rgba(26, 26, 28, 0.7);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border: 1px solid rgba(212, 175, 55, 0.18);
+transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+border-color: rgba(212, 175, 55, 0.5);
+box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.2);
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+width: 6px;
+}
+
+::-webkit-scrollbar-track {
+background: var(--color-obsidian);
+}
+
+::-webkit-scrollbar-thumb {
+background: var(--color-gold);
+border-radius: 3px;
+}

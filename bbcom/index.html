@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE PARFUM | 頂級高級訂製香氛</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#FAF4E5',
+                            300: '#E6C875',
+                            400: '#D4AF37',
+                            500: '#C5A028',
+                            600: '#997A15'
+                        },
+                        obsidian: '#0D0D0E',
+                        charcoal: '#1A1A1C',
+                        surface: '#242428',
+                        champagne: '#F7F3EB'
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0D0D0E;
+            color: #F7F3EB;
+        }
+        h1, h2, h3, h4, .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0D0D0E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 3px;
+        }
+        /* Glassmorphism */
+        .glass-nav {
+            background: rgba(13, 13, 14, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .glass-card {
+            background: rgba(26, 26, 28, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .glass-card:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.15);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FAF4E5 0%, #D4AF37 50%, #997A15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-btn {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA820A 100%);
+            transition: all 0.3s ease;
+        }
+        .gold-btn:hover {
+            background: linear-gradient(135deg, #E6C875 0%, #D4AF37 100%);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-champagne antialiased overflow-x-hidden">
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-24 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-40 glass-nav border-b border-gold-400/20 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-champagne hover:text-gold-400 text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Brand Logo -->
+                <a href="#" class="flex flex-col items-center group">
+                    <span class="font-serif text-2xl sm:text-3xl tracking-[0.25em] gold-gradient-text font-bold uppercase">LUXE PARFUM</span>
+                    <span class="text-[9px] tracking-[0.4em] text-gold-400/80 -mt-1 uppercase">Haute Parfumerie</span>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8 text-xs tracking-[0.2em] font-medium uppercase text-champagne/80">
+                    <a href="#collection" class="hover:text-gold-400 transition-colors duration-200">臻選系列</a>
+                    <a href="#scent-quiz" class="hover:text-gold-400 transition-colors duration-200">測驗選香</a>
+                    <a href="#story" class="hover:text-gold-400 transition-colors duration-200">品牌工藝</a>
+                    <a href="#reviews" class="hover:text-gold-400 transition-colors duration-200">品味迴響</a>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="flex items-center space-x-5">
+                    <button id="cartBtn" class="relative text-champagne hover:text-gold-400 transition-colors duration-200 p-2">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-gold-400 text-obsidian font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-75 transition-all duration-300">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-charcoal border-b border-gold-400/20 px-6 py-6 space-y-4 text-sm tracking-widest uppercase">
+            <a href="#collection" class="block hover:text-gold-400 py-1 border-b border-surface">臻選系列</a>
+            <a href="#scent-quiz" class="block hover:text-gold-400 py-1 border-b border-surface">測驗選香</a>
+            <a href="#story" class="block hover:text-gold-400 py-1 border-b border-surface">品牌工藝</a>
+            <a href="#reviews" class="block hover:text-gold-400 py-1">品味迴響</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Ambient Background Image Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1615397349754-cfa2066a298e?q=80&w=2000&auto=format&fit=crop" 
+                 alt="Luxury Perfume Atmosphere" 
+                 class="w-full h-full object-cover object-center opacity-30 filter brightness-75 scale-105 animate-pulse duration-[10000ms]">
+            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-obsidian/40"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold-400/30 bg-gold-400/10 text-gold-300 text-xs tracking-[0.3em] uppercase mb-8">
+                <i class="fa-solid fa-crown text-[10px]"></i> 法國高級訂製香氛系列
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif text-champagne font-normal tracking-wide leading-tight mb-6">
+                凝結時光的 <br><span class="gold-gradient-text italic font-normal">靈魂香氣</span>
+            </h1>
+            
+            <p class="max-w-2xl text-champagne/70 text-sm sm:text-base leading-relaxed tracking-wider font-light mb-10">
+                以最珍稀萃取的天然花木原精，打造專屬於靈魂層次的專屬印記。十款獨家編號香氛，演繹高雅、神秘與不凡品味。
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                <a href="#collection" class="gold-btn text-obsidian font-semibold px-8 py-4 rounded-full text-xs tracking-[0.25em] uppercase w-full sm:w-auto text-center">
+                    探索臻選系列 <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                </a>
+                <a href="#scent-quiz" class="border border-gold-400/40 text-gold-300 hover:bg-gold-400/10 transition-all duration-300 px-8 py-4 rounded-full text-xs tracking-[0.25em] uppercase w-full sm:w-auto text-center">
+                    尋找專屬香氣
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <a href="#collection" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-gold-400/60 hover:text-gold-400 transition-colors">
+            <span class="text-[10px] tracking-[0.3em] uppercase mb-2">SCROLL</span>
+            <i class="fa-solid fa-chevron-down animate-bounce text-xs"></i>
+        </a>
+    </section>
+
+    <!-- Perfume Collection Section -->
+    <section id="collection" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-16">
+            <span class="text-gold-400 text-xs tracking-[0.4em] uppercase font-semibold">Haute Collection</span>
+            <h2 class="text-3xl sm:text-5xl font-serif text-champagne mt-2 font-normal">全系列十款經典香氛</h2>
+            <div class="w-12 h-[1px] bg-gold-400 mx-auto mt-4"></div>
+        </div>
+
+        <!-- Fragrance Family Filters -->
+        <div class="flex flex-wrap justify-center items-center gap-2 sm:gap-4 mb-16">
+            <button class="filter-btn active px-5 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 border border-gold-400 bg-gold-400 text-obsidian font-medium" data-filter="all">
+                全部系列 (10)
+            </button>
+            <button class="filter-btn px-5 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 border border-gold-400/30 text-champagne/70 hover:border-gold-400 hover:text-gold-300" data-filter="floral">
+                花香調 (Floral)
+            </button>
+            <button class="filter-btn px-5 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 border border-gold-400/30 text-champagne/70 hover:border-gold-400 hover:text-gold-300" data-filter="woody">
+                木質調 (Woody)
+            </button>
+            <button class="filter-btn px-5 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 border border-gold-400/30 text-champagne/70 hover:border-gold-400 hover:text-gold-300" data-filter="fresh">
+                清新調 (Fresh)
+            </button>
+            <button class="filter-btn px-5 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 border border-gold-400/30 text-champagne/70 hover:border-gold-400 hover:text-gold-300" data-filter="oriental">
+                東方/美食調 (Amber)
+            </button>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+            <!-- Dynamic Inject via JS -->
+        </div>
+    </section>
+
+    <!-- Scent Finder Quiz Section -->
+    <section id="scent-quiz" class="py-20 bg-charcoal border-y border-gold-400/20 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-10">
+                <span class="text-gold-400 text-xs tracking-[0.4em] uppercase font-semibold">Interactive Experience</span>
+                <h2 class="text-3xl sm:text-4xl font-serif text-champagne mt-2">尋找您的專屬香氣 (Scent Finder)</h2>
+                <p class="text-champagne/60 text-xs sm:text-sm mt-2">回答3個簡單的問題，讓我們為您推薦最符合今日心境的命定香水</p>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 sm:p-10 border border-gold-400/20">
+                <!-- Quiz Container -->
+                <div id="quizBox">
+                    <div class="flex justify-between items-center mb-6 text-xs text-gold-400/80">
+                        <span id="quizStepText">問題 1 / 3</span>
+                        <div class="w-24 bg-surface h-1 rounded-full overflow-hidden">
+                            <div id="quizProgressBar" class="bg-gold-400 h-full w-1/3 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <h3 id="quizQuestion" class="text-lg sm:text-xl font-serif text-champagne mb-6 text-center">
+                        您最希望香水帶給您什麼樣的感覺？
+                    </h3>
+
+                    <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Quiz Result (Hidden initially) -->
+                <div id="quizResult" class="hidden text-center py-4">
+                    <div class="inline-block p-3 rounded-full bg-gold-400/10 text-gold-400 mb-4">
+                        <i class="fa-solid fa-sparkles text-2xl"></i>
+                    </div>
+                    <span class="text-xs text-gold-400 tracking-[0.3em] uppercase block">YOUR SIGNATURE SCENT IS</span>
+                    <h3 id="resultName" class="text-2xl sm:text-3xl font-serif text-champagne mt-1 mb-2">晨曦白茶 Morning White Tea</h3>
+                    <p id="resultDesc" class="text-xs sm:text-sm text-champagne/70 max-w-lg mx-auto mb-6 leading-relaxed"></p>
+                    
+                    <div class="flex justify-center gap-4">
+                        <button id="quizQuickViewBtn" class="gold-btn text-obsidian text-xs font-semibold px-6 py-3 rounded-full tracking-widest uppercase">
+                            查看這款香水
+                        </button>
+                        <button id="quizResetBtn" class="border border-gold-400/40 text-champagne text-xs px-6 py-3 rounded-full tracking-widest uppercase hover:border-gold-400">
+                            重新測驗
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story & Craftsmanship -->
+    <section id="story" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div class="relative">
+                <div class="aspect-[4/5] rounded-2xl overflow-hidden border border-gold-400/20 relative">
+                    <img src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Perfume Craftsmanship" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                </div>
+                <div class="absolute -bottom-6 -right-6 glass-card p-6 rounded-xl hidden sm:block max-w-xs border border-gold-400/30">
+                    <p class="text-gold-400 font-serif text-2xl italic mb-1">100% Extract</p>
+                    <p class="text-xs text-champagne/70">嚴選南法格拉斯天然花卉與冷壓植物原精調配。</p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <span class="text-gold-400 text-xs tracking-[0.4em] uppercase font-semibold">Craftsmanship</span>
+                <h2 class="text-3xl sm:text-5xl font-serif text-champagne font-normal leading-tight">
+                    匠心調香<br><span class="italic text-gold-300">封存時光中的極致藝術</span>
+                </h2>
+                <p class="text-champagne/70 text-sm leading-relaxed tracking-wide font-light">
+                    LUXE PARFUM 堅信香水不只是氣味，更是無形的個人印記。我們攜手法國百年奢華調香大師，嚴選極致珍稀原料——從清晨微露摘採的白茶嫩芽、波本香草，到來自高山的沉香與冷杉。
+                </p>
+                <p class="text-champagne/70 text-sm leading-relaxed tracking-wide font-light">
+                    每一瓶香氛皆經過長達180天的陳化熟成，確保前、中、後調完美沉澱層次感，帶來持久且令人心馳神往的著香體驗。
+                </p>
+
+                <div class="grid grid-cols-3 gap-6 pt-4 border-t border-gold-400/20 text-center">
+                    <div>
+                        <span class="block text-2xl sm:text-3xl font-serif gold-gradient-text font-bold">100%</span>
+                        <span class="text-[10px] text-champagne/60 uppercase tracking-widest mt-1 block">純天然植萃</span>
+                    </div>
+                    <div>
+                        <span class="block text-2xl sm:text-3xl font-serif gold-gradient-text font-bold">180天</span>
+                        <span class="text-[10px] text-champagne/60 uppercase tracking-widest mt-1 block">香體熟成</span>
+                    </div>
+                    <div>
+                        <span class="block text-2xl sm:text-3xl font-serif gold-gradient-text font-bold">24hr+</span>
+                        <span class="text-[10px] text-champagne/60 uppercase tracking-widest mt-1 block">極致持香</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 bg-charcoal/50 border-t border-gold-400/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-gold-400 text-xs tracking-[0.4em] uppercase font-semibold">Testimonials</span>
+                <h2 class="text-3xl sm:text-4xl font-serif text-champagne mt-2">品味迴響</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-2xl relative">
+                    <div class="text-gold-400 text-xs mb-3">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-xs sm:text-sm text-champagne/80 italic mb-6 leading-relaxed">
+                        「No. 01 晨曦白茶的味道極其高雅！上班時噴完全不會刺鼻，而是一股如清晨茶晨露般的清香，身邊同事都在問是哪家的香水。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold-400/20 flex items-center justify-center font-serif text-gold-300 font-bold">V</div>
+                        <div>
+                            <p class="text-xs font-semibold text-champagne">Victoria L.</p>
+                            <span class="text-[10px] text-champagne/50">已購買 No. 01 晨曦白茶</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl relative">
+                    <div class="text-gold-400 text-xs mb-3">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-xs sm:text-sm text-champagne/80 italic mb-6 leading-relaxed">
+                        「No. 02 煙燻烏木真的是氣場神器！深沉的皮革與烏木伴隨微微玫瑰香，晚上出席晚宴時被問了不下三次，非常迷人且有高級感。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold-400/20 flex items-center justify-center font-serif text-gold-300 font-bold">A</div>
+                        <div>
+                            <p class="text-xs font-semibold text-champagne">Alexander K.</p>
+                            <span class="text-[10px] text-champagne/50">已購買 No. 02 煙燻烏木</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl relative">
+                    <div class="text-gold-400 text-xs mb-3">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-xs sm:text-sm text-champagne/80 italic mb-6 leading-relaxed">
+                        「包裝質感精緻得像藝術品！No. 08 微醺香草甜酒的波本香草與蘭姆酒尾調甜而不膩，冬天噴在羊毛毛衣上簡直是太治癒了。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gold-400/20 flex items-center justify-center font-serif text-gold-300 font-bold">E</div>
+                        <div>
+                            <p class="text-xs font-semibold text-champagne">Eileen H.</p>
+                            <span class="text-[10px] text-champagne/50">已購買 No. 08 微醺香草甜酒</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer & Newsletter Section -->
+    <footer class="bg-obsidian border-t border-gold-400/20 pt-16 pb-12 text-champagne/70 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <!-- Brand Info -->
+                <div class="md:col-span-1 space-y-4">
+                    <span class="font-serif text-2xl tracking-[0.2em] gold-gradient-text font-bold uppercase block">LUXE PARFUM</span>
+                    <p class="text-champagne/60 leading-relaxed font-light text-[11px]">
+                        高級專屬訂製香氛品牌，以匠心演繹優雅與浪漫。每一款香氛皆為一段難忘的獨家故事。
+                    </p>
+                </div>
+
+                <!-- Navigation Links -->
+                <div>
+                    <h4 class="text-champagne font-semibold tracking-widest uppercase mb-4 text-xs">香氛系列</h4>
+                    <ul class="space-y-2 font-light">
+                        <li><a href="#collection" class="hover:text-gold-400 transition-colors">花香與綠意調</a></li>
+                        <li><a href="#collection" class="hover:text-gold-400 transition-colors">深邃木質調</a></li>
+                        <li><a href="#collection" class="hover:text-gold-400 transition-colors">海洋柑橘調</a></li>
+                        <li><a href="#collection" class="hover:text-gold-400 transition-colors">奢華琥珀美食調</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Care -->
+                <div>
+                    <h4 class="text-champagne font-semibold tracking-widest uppercase mb-4 text-xs">顧客服務</h4>
+                    <ul class="space-y-2 font-light">
+                        <li><a href="#" class="hover:text-gold-400 transition-colors">購物與配送說明</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition-colors">香氛試香禮盒專區</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition-colors">常見問題 FAQ</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition-colors">聯絡客服顧問</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-champagne font-semibold tracking-widest uppercase mb-4 text-xs">訂閱尊榮通訊</h4>
+                    <p class="text-champagne/60 mb-3 text-[11px]">率先掌握限量新品上市與 VIP 私密特賣活動。</p>
+                    <form onsubmit="event.preventDefault(); showToast('感謝您的訂閱！已發送VIP禮遇至您的信箱。');" class="flex gap-2">
+                        <input type="email" placeholder="Enter your email" required class="bg-surface border border-gold-400/30 text-champagne px-3 py-2 rounded-lg text-xs w-full focus:outline-none focus:border-gold-400">
+                        <button type="submit" class="gold-btn text-obsidian px-4 py-2 rounded-lg font-semibold text-xs uppercase">訂閱</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-surface pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-champagne/50">
+                <p>&copy; 2026 LUXE PARFUM Haute Parfumerie. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-gold-400"><i class="fa-brands fa-instagram text-base"></i></a>
+                    <a href="#" class="hover:text-gold-400"><i class="fa-brands fa-facebook text-base"></i></a>
+                    <a href="#" class="hover:text-gold-400"><i class="fa-brands fa-pinterest text-base"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none transition-opacity duration-300 opacity-0">
+        <div id="cartBackdrop" class="absolute inset-0 bg-obsidian/80 backdrop-blur-sm transition-opacity duration-300 pointer-events-auto"></div>
+
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-charcoal border-l border-gold-400/20 text-champagne flex flex-col shadow-2xl pointer-events-auto transform translate-x-full transition-transform duration-300 ease-in-out" id="cartPanel">
+                <!-- Cart Header -->
+                <div class="p-6 border-b border-surface flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bag-shopping text-gold-400 text-lg"></i>
+                        <h3 class="font-serif text-xl tracking-wider text-champagne">您的購物車</h3>
+                    </div>
+                    <button id="closeCartBtn" class="text-champagne/60 hover:text-gold-400 text-xl p-2 focus:outline-none">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items Container -->
+                <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <!-- Dynamic Cart Items -->
+                </div>
+
+                <!-- Cart Footer / Total -->
+                <div class="p-6 border-t border-surface bg-obsidian/50 space-y-4">
+                    <div class="space-y-2 text-xs text-champagne/70">
+                        <div class="flex justify-between">
+                            <span>商品小計 Subtotal</span>
+                            <span id="cartSubtotal" class="text-champagne font-semibold">NT$ 0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>全館尊榮免運 Standard Shipping</span>
+                            <span class="text-gold-400">免運費 Free</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-surface pt-3 flex justify-between items-center">
+                        <span class="font-serif text-base text-champagne">總計 Total</span>
+                        <span id="cartTotal" class="font-serif text-2xl gold-gradient-text font-bold">NT$ 0</span>
+                    </div>
+
+                    <button id="checkoutBtn" class="w-full gold-btn text-obsidian font-semibold py-3.5 rounded-xl tracking-widest uppercase text-xs flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock text-xs"></i> 前往尊榮結帳
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Product Modal -->
+    <div id="quickViewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="modalBackdrop" class="absolute inset-0 bg-obsidian/85 backdrop-blur-md"></div>
+
+        <div class="relative glass-card max-w-3xl w-full rounded-2xl overflow-hidden border border-gold-400/30 z-10 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
+            <button id="closeModalBtn" class="absolute top-4 right-4 z-20 text-champagne/70 hover:text-gold-400 text-xl w-10 h-10 rounded-full bg-obsidian/50 flex items-center justify-center border border-gold-400/20">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Modal Image -->
+                <div class="relative aspect-square md:aspect-auto bg-obsidian/60 overflow-hidden flex items-center justify-center">
+                    <img id="modalImg" src="" alt="Perfume" class="w-full h-full object-cover">
+                    <span id="modalNumTag" class="absolute top-4 left-4 bg-obsidian/80 backdrop-blur-sm text-gold-400 border border-gold-400/30 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                        NO. 01
+                    </span>
+                </div>
+
+                <!-- Modal Content -->
+                <div class="p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div>
+                        <span id="modalStyleTag" class="text-gold-400 text-[11px] tracking-[0.2em] uppercase block mb-1">清新綠意花香調</span>
+                        <h3 id="modalTitle" class="text-2xl sm:text-3xl font-serif text-champagne font-normal">晨曦白茶</h3>
+                        <p id="modalSubTitle" class="text-xs text-champagne/50 italic mb-4">Morning White Tea</p>
+                        
+                        <div class="text-2xl font-serif gold-gradient-text font-bold mb-4" id="modalPrice">
+                            NT$ 3,800
+                        </div>
+
+                        <p id="modalDesc" class="text-xs sm:text-sm text-champagne/70 leading-relaxed mb-6 font-light">
+                            宛如清晨第一縷陽光穿透薄霧，採摘自高山微露的白茶嫩芽。
+                        </p>
+
+                        <!-- Fragrance Pyramid Notes -->
+                        <div class="bg-surface/50 rounded-xl p-4 space-y-2 border border-gold-400/10 mb-6 text-xs">
+                            <div class="flex"><span class="w-16 text-gold-400 font-medium">前調 Top:</span><span id="modalTopNotes" class="text-champagne/80"></span></div>
+                            <div class="flex"><span class="w-16 text-gold-400 font-medium">中調 Mid:</span><span id="modalMidNotes" class="text-champagne/80"></span></div>
+                            <div class="flex"><span class="w-16 text-gold-400 font-medium">後調 Base:</span><span id="modalBaseNotes" class="text-champagne/80"></span></div>
+                        </div>
+
+                        <!-- Quantity Selector -->
+                        <div class="flex items-center gap-4 mb-6">
+                            <span class="text-xs text-champagne/70 uppercase tracking-wider">數量 :</span>
+                            <div class="flex items-center border border-gold-400/30 rounded-lg overflow-hidden bg-surface">
+                                <button id="qtyMinus" class="px-3 py-1.5 text-champagne hover:text-gold-400"><i class="fa-solid fa-minus text-xs"></i></button>
+                                <span id="qtyVal" class="px-4 text-xs font-semibold">1</span>
+                                <button id="qtyPlus" class="px-3 py-1.5 text-champagne hover:text-gold-400"><i class="fa-solid fa-plus text-xs"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="modalAddToCartBtn" class="w-full gold-btn text-obsidian font-semibold py-3.5 rounded-xl tracking-widest uppercase text-xs flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bag-shopping"></i> 加入購物車
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic Section -->
+    <script>
+        // 10 Luxury Perfumes Data Set with exact mappings
+        const perfumes = [
+            {
+                id: '01',
+                num: 'No. 01',
+                name: '晨曦白茶',
+                enName: 'Morning White Tea',
+                style: '清新綠意花香調',
+                category: 'floral',
+                price: 3800,
+                fallbackImg: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/01.jpg',
+                top: '佛手柑、苦橙葉',
+                mid: '白茶、茉莉、山谷百合',
+                base: '雪松、白琥珀',
+                desc: '宛如清晨第一縷陽光穿透薄霧，採摘自高山微露的白茶嫩芽。清新優雅的茶香伴隨淡淡茉莉，最後沉澱於溫暖雪松之中，帶來純淨、寧靜且不失格調的低調氣質。'
+            },
+            {
+                id: '02',
+                num: 'No. 02',
+                name: '煙燻烏木',
+                enName: 'Smokey Oud',
+                style: '深邃木質東方調',
+                category: 'woody',
+                price: 5200,
+                fallbackImg: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/02.jpg',
+                top: '小豆蔻、粉紅胡椒',
+                mid: '烏木（沉香）、大馬士革玫瑰、皮革',
+                base: '焚香、檀香、香草',
+                desc: '珍稀烏木與溫柔玫瑰的完美共舞。溫暖的煙燻質感層層交織，散發出成熟、神秘且極具包容力的紳士與貴族氣息，留香持久且充滿沉穩魅力。'
+            },
+            {
+                id: '03',
+                num: 'No. 03',
+                name: '絲絨暮玫瑰',
+                enName: 'Velvet Twilight Rose',
+                style: '奢華花香木質調',
+                category: 'floral',
+                price: 4600,
+                fallbackImg: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/03.jpg',
+                top: '黑加侖、紅酒香氣',
+                mid: '格拉斯玫瑰、牡丹、藏紅花',
+                base: '廣藿香、麝香、香草豆',
+                desc: '將夜幕低垂時的奢華浪漫凝結於瓶中。濃郁濃厚的絲絨玫瑰帶有一絲微醺果香，隨後轉為沉靜的廣藿香與麝香，展現自信、嫵媚且令人難忘的氣場。'
+            },
+            {
+                id: '04',
+                num: 'No. 04',
+                name: '蔚藍海岸',
+                enName: 'French Riviera',
+                style: '清爽海洋柑橘調',
+                category: 'fresh',
+                price: 3600,
+                fallbackImg: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/04.jpg',
+                top: '西西里檸檬、海鹽、粉紅葡萄柚',
+                mid: '海洋橙花、迷迭香、鼠尾草',
+                base: '漂流木、橡木苔',
+                desc: '靈感來自南法蔚藍海岸的海風與陽光。開場是明亮柑橘與清爽海鹽，中後調伴隨日光曬過的漂流木香氣，注入無拘無束的自由感與陽光活力。'
+            },
+            {
+                id: '05',
+                num: 'No. 05',
+                name: '無花果與冷杉',
+                enName: 'Fig & Siberian Fir',
+                style: '綠意果香木質調',
+                category: 'woody',
+                price: 4200,
+                fallbackImg: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/05.jpg',
+                top: '無花果葉、青草香',
+                mid: '野生無花果、椰奶、鳶尾花',
+                base: '冷杉、雪松、干草',
+                desc: '踏入陽光灑落的微涼森林，多汁無花果伴隨微微乳香，與微苦的綠葉及冷杉木完美融合。溫暖中帶著自然生機，非常適合追求獨特質感與文藝氣息的你。'
+            },
+            {
+                id: '06',
+                num: 'No. 06',
+                name: '金燦琥珀與喀什米爾',
+                enName: 'Solar Amber & Cashmere',
+                style: '溫柔琥珀木質調',
+                category: 'oriental',
+                price: 4800,
+                fallbackImg: 'https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/06.jpg',
+                top: '橙花、香檸檬',
+                mid: '喀什米爾木、琥珀、安息香',
+                base: '零陵香豆、白麝香',
+                desc: '如同披上一件純羊絨毛衣般的貼膚與舒適。暖陽般溫熱的琥珀交織柔和木質，宛如體香般自然散發，給予極致的放鬆感與溫馨包覆感。'
+            },
+            {
+                id: '07',
+                num: 'No. 07',
+                name: '黑夜鳶尾',
+                enName: 'Midnight Iris',
+                style: '優雅粉香花香調',
+                category: 'floral',
+                price: 4900,
+                fallbackImg: 'https://images.unsplash.com/photo-1563178406-4cdc2923acbc?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/07.jpg',
+                top: '紫羅蘭葉、香檸檬',
+                mid: '佛羅倫斯鳶尾花、含羞草',
+                base: '麂皮、香根草、琥珀',
+                desc: '高貴優雅的極致代表。嚴選佛羅倫斯珍稀鳶尾根，帶有精緻的微粉質香氣與輕柔麂皮質感，低調奢華，展現沉靜獨立的高級品味。'
+            },
+            {
+                id: '08',
+                num: 'No. 08',
+                name: '微醺香草甜酒',
+                enName: 'Bourbon Vanilla & Rum',
+                style: '美食東方調',
+                category: 'oriental',
+                price: 4500,
+                fallbackImg: 'https://images.unsplash.com/photo-1512777576244-b846ac3d816f?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/08.jpg',
+                top: '波本威士忌、肉桂',
+                mid: '蘭姆酒、可可豆、苦杏仁',
+                base: '馬達加斯加香草、琥珀木',
+                desc: '宛如私密酒吧中的一杯特調醇酒。香甜濃郁的波本香草浸潤在烈酒與肉桂香氣中，帶來誘人、溫暖且充滿微醺感的親密氛圍。'
+            },
+            {
+                id: '09',
+                num: 'No. 09',
+                name: '晨露橙花',
+                enName: 'Dewy Neroli',
+                style: '明亮白花香調',
+                category: 'fresh',
+                price: 3900,
+                fallbackImg: 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/09.jpg',
+                top: '綠橘、橙花油',
+                mid: '突尼斯橙花、大理花、小蒼蘭',
+                base: '淺色木香、白麝香',
+                desc: '採摘清晨微露下的純白橙花，清新乾淨、明亮動人。花香與果香比例完美平衡，宛如洗淨後的純白襯衫，散發令人忍不住想靠近的純真氣息。'
+            },
+            {
+                id: '10',
+                num: 'No. 10',
+                name: '冷冽大地',
+                enName: 'Alpine Vetiver',
+                style: '干爽辛香木質調',
+                category: 'woody',
+                price: 4300,
+                fallbackImg: 'https://images.unsplash.com/photo-1508746829417-e6f548d8d6ed?q=80&w=800&auto=format&fit=crop',
+                localImg: 'images/10.jpg',
+                top: '杜松子、葡萄柚',
+                mid: '海地香根草、天竺葵',
+                base: '安息香、雪松、廣藿香',
+                desc: '靈感源自高山上的冷冽空氣與堅硬岩石。清爽的杜松子引出乾燥俐落的香根草香氣，展現出洗練、理性且堅定不移的現代都市氣場。'
+            }
+        ];
+
+        // Global State
+        let cart = [];
+        let currentModalItem = null;
+        let currentModalQty = 1;
+
+        // Quiz State
+        const quizQuestions = [
+            {
+                q: "您最希望香水帶給您什麼樣的感覺？",
+                options: [
+                    { text: "清晨綠意與優雅茶香", target: "01" },
+                    { text: "深沉神秘且具氣場的木質質感", target: "02" },
+                    { text: "清爽海風與陽光充沛的活力", target: "04" },
+                    { text: "溫暖香甜且有酒吧微醺氛圍", target: "08" }
+                ]
+            },
+            {
+                q: "您平時喜愛的穿搭風格是什麼？",
+                options: [
+                    { text: "乾淨簡約的白色襯衫或亞麻質料", target: "09" },
+                    { text: "極簡俐落的深色西裝或冷艷風格", target: "10" },
+                    { text: "華麗絲絨、晚宴禮服與金飾", target: "03" },
+                    { text: "柔軟羊絨針織與舒適大地色系", target: "06" }
+                ]
+            },
+            {
+                q: "偏好的著香場合？",
+                options: [
+                    { text: "日常工作與放鬆的私密時光", target: "05" },
+                    { text: "高雅晚宴與重要約會", target: "07" }
+                ]
+            }
+        ];
+        let currentQuizStep = 0;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProductGrid('all');
+            initEventListeners();
+            initQuiz();
+        });
+
+        function renderProductGrid(filter = 'all') {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            const filteredPerfumes = filter === 'all' 
+                ? perfumes 
+                : perfumes.filter(p => p.category === filter);
+
+            filteredPerfumes.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col justify-between group transition-all duration-300 transform hover:-translate-y-2';
+                card.innerHTML = `
+                    <div class="relative aspect-square overflow-hidden bg-surface/50 cursor-pointer" onclick="openQuickView('${p.id}')">
+                        <img src="${p.localImg}" 
+                             onerror="this.onerror=null; this.src='${p.fallbackImg}';" 
+                             alt="${p.name}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-obsidian/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <span class="text-xs text-gold-300 uppercase tracking-widest font-medium"><i class="fa-regular fa-eye mr-1"></i> 快速預覽 Quick View</span>
+                        </div>
+
+                        <span class="absolute top-3 left-3 bg-obsidian/80 backdrop-blur-sm text-gold-400 border border-gold-400/30 text-[10px] font-bold px-3 py-1 rounded-full tracking-widest uppercase">
+                            ${p.num}
+                        </span>
+                    </div>
+
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <span class="text-[10px] text-gold-400/80 tracking-[0.2em] uppercase font-medium block mb-1">${p.style}</span>
+                            <h3 class="text-xl font-serif text-champagne group-hover:text-gold-300 transition-colors cursor-pointer" onclick="openQuickView('${p.id}')">${p.name}</h3>
+                            <p class="text-[11px] text-champagne/40 italic font-light mb-3">${p.enName}</p>
+                            <p class="text-xs text-champagne/60 line-clamp-2 leading-relaxed font-light mb-4">${p.desc}</p>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between border-t border-surface pt-4 mb-4">
+                                <span class="text-xs text-champagne/50">專屬奢華 50ml</span>
+                                <span class="font-serif text-lg gold-gradient-text font-bold">NT$ ${p.price.toLocaleString()}</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="openQuickView('${p.id}')" class="border border-gold-400/30 text-champagne hover:border-gold-400 hover:text-gold-300 text-[11px] py-2.5 rounded-xl uppercase tracking-wider transition-all">
+                                    詳情
+                                </button>
+                                <button onclick="addToCart('${p.id}', 1)" class="gold-btn text-obsidian font-semibold text-[11px] py-2.5 rounded-xl uppercase tracking-wider">
+                                    <i class="fa-solid fa-bag-shopping mr-1"></i> 加入
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openQuickView(id) {
+            const perfume = perfumes.find(p => p.id === id);
+            if (!perfume) return;
+
+            currentModalItem = perfume;
+            currentModalQty = 1;
+
+            const imgElem = document.getElementById('modalImg');
+            imgElem.src = perfume.localImg;
+            imgElem.onerror = () => { imgElem.src = perfume.fallbackImg; };
+
+            document.getElementById('modalNumTag').innerText = perfume.num;
+            document.getElementById('modalStyleTag').innerText = perfume.style;
+            document.getElementById('modalTitle').innerText = perfume.name;
+            document.getElementById('modalSubTitle').innerText = perfume.enName;
+            document.getElementById('modalPrice').innerText = `NT$ ${perfume.price.toLocaleString()}`;
+            document.getElementById('modalDesc').innerText = perfume.desc;
+            
+            document.getElementById('modalTopNotes').innerText = perfume.top;
+            document.getElementById('modalMidNotes').innerText = perfume.mid;
+            document.getElementById('modalBaseNotes').innerText = perfume.base;
+
+            document.getElementById('qtyVal').innerText = currentModalQty;
+
+            const modal = document.getElementById('quickViewModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.remove('scale-95');
+            modal.querySelector('.transform').classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('quickViewModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.remove('scale-100');
+            modal.querySelector('.transform').classList.add('scale-95');
+        }
+
+        function addToCart(id, qty = 1) {
+            const perfume = perfumes.find(p => p.id === id);
+            if (!perfume) return;
+
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += qty;
+            } else {
+                cart.push({ ...perfume, qty });
+            }
+
+            updateCartUI();
+            showToast(`已成功將「${perfume.name}」加入購物車`);
+        }
+
+        function updateCartUI() {
+            const cartBadge = document.getElementById('cartBadge');
+            const cartItemsList = document.getElementById('cartItemsList');
+            const cartSubtotal = document.getElementById('cartSubtotal');
+            const cartTotal = document.getElementById('cartTotal');
+
+            const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
+            const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+            // Badge Update
+            if (totalItems > 0) {
+                cartBadge.innerText = totalItems;
+                cartBadge.classList.remove('opacity-0', 'scale-75');
+                cartBadge.classList.add('opacity-100', 'scale-100');
+            } else {
+                cartBadge.classList.add('opacity-0', 'scale-75');
+            }
+
+            // Items List
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = `
+                    <div class="text-center py-16 text-champagne/40 flex flex-col items-center">
+                        <i class="fa-solid fa-bag-shopping text-4xl mb-3 text-gold-400/30"></i>
+                        <p class="text-xs">您的購物車目前是空的</p>
+                    </div>
+                `;
+            } else {
+                cartItemsList.innerHTML = '';
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center gap-4 p-3 rounded-xl bg-surface/40 border border-gold-400/10';
+                    row.innerHTML = `
+                        <img src="${item.localImg}" onerror="this.onerror=null; this.src='${item.fallbackImg}';" class="w-16 h-16 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="text-xs font-semibold text-champagne">${item.name}</h4>
+                            <p class="text-[10px] text-gold-400">${item.num}</p>
+                            <span class="text-xs gold-gradient-text font-serif font-bold">NT$ ${item.price.toLocaleString()}</span>
+                        </div>
+                        <div class="flex items-center border border-gold-400/20 rounded-lg overflow-hidden bg-obsidian">
+                            <button onclick="changeCartQty('${item.id}', -1)" class="px-2 py-1 text-xs hover:text-gold-400"><i class="fa-solid fa-minus"></i></button>
+                            <span class="px-2 text-xs font-semibold">${item.qty}</span>
+                            <button onclick="changeCartQty('${item.id}', 1)" class="px-2 py-1 text-xs hover:text-gold-400"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    `;
+                    cartItemsList.appendChild(row);
+                });
+            }
+
+            cartSubtotal.innerText = `NT$ ${totalPrice.toLocaleString()}`;
+            cartTotal.innerText = `NT$ ${totalPrice.toLocaleString()}`;
+        }
+
+        function changeCartQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            updateCartUI();
+        }
+
+        function toggleCart(show) {
+            const drawer = document.getElementById('cartDrawer');
+            const panel = document.getElementById('cartPanel');
+
+            if (show) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                panel.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'glass-card border border-gold-400/40 text-champagne px-4 py-3 rounded-xl shadow-2xl text-xs flex items-center gap-3 pointer-events-auto transform translate-y-2 transition-all duration-300';
+            toast.innerHTML = `<i class="fa-solid fa-check-circle text-gold-400 text-sm"></i> <span>${msg}</span>`;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Quiz Logic
+        function initQuiz() {
+            renderQuizStep();
+
+            document.getElementById('quizResetBtn').addEventListener('click', () => {
+                currentQuizStep = 0;
+                document.getElementById('quizBox').classList.remove('hidden');
+                document.getElementById('quizResult').classList.add('hidden');
+                renderQuizStep();
+            });
+        }
+
+        function renderQuizStep() {
+            const step = quizQuestions[currentQuizStep];
+            document.getElementById('quizStepText').innerText = `問題 ${currentQuizStep + 1} / ${quizQuestions.length}`;
+            document.getElementById('quizProgressBar').style.width = `${((currentQuizStep + 1) / quizQuestions.length) * 100}%`;
+            document.getElementById('quizQuestion').innerText = step.q;
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            step.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'p-4 rounded-xl bg-surface/50 border border-gold-400/20 text-champagne text-xs sm:text-sm hover:border-gold-400 hover:bg-gold-400/10 transition-all text-left';
+                btn.innerText = opt.text;
+                btn.onclick = () => handleQuizSelect(opt.target);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleQuizSelect(targetId) {
+            if (currentQuizStep < quizQuestions.length - 1) {
+                currentQuizStep++;
+                renderQuizStep();
+            } else {
+                showQuizResult(targetId);
+            }
+        }
+
+        function showQuizResult(id) {
+            const perfume = perfumes.find(p => p.id === id) || perfumes[0];
+            document.getElementById('quizBox').classList.add('hidden');
+            document.getElementById('quizResult').classList.remove('hidden');
+
+            document.getElementById('resultName').innerText = `${perfume.num} ${perfume.name} (${perfume.enName})`;
+            document.getElementById('resultDesc').innerText = perfume.desc;
+
+            document.getElementById('quizQuickViewBtn').onclick = () => openQuickView(perfume.id);
+        }
+
+        // Initialize event listeners
+        function initEventListeners() {
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-gold-400', 'text-obsidian', 'border-gold-400');
+                        b.classList.add('border-gold-400/30', 'text-champagne/70');
+                    });
+                    e.target.classList.add('active', 'bg-gold-400', 'text-obsidian', 'border-gold-400');
+                    renderProductGrid(e.target.dataset.filter);
+                });
+            });
+
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.toggle('hidden');
+            });
+
+            // Cart drawer buttons
+            document.getElementById('cartBtn').addEventListener('click', () => toggleCart(true));
+            document.getElementById('closeCartBtn').addEventListener('click', () => toggleCart(false));
+            document.getElementById('cartBackdrop').addEventListener('click', () => toggleCart(false));
+
+            // Modal buttons
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('modalBackdrop').addEventListener('click', closeModal);
+
+            document.getElementById('qtyMinus').addEventListener('click', () => {
+                if (currentModalQty > 1) {
+                    currentModalQty--;
+                    document.getElementById('qtyVal').innerText = currentModalQty;
+                }
+            });
+
+            document.getElementById('qtyPlus').addEventListener('click', () => {
+                currentModalQty++;
+                document.getElementById('qtyVal').innerText = currentModalQty;
+            });
+
+            document.getElementById('modalAddToCartBtn').addEventListener('click', () => {
+                if (currentModalItem) {
+                    addToCart(currentModalItem.id, currentModalQty);
+                    closeModal();
+                }
+            });
+
+            document.getElementById('checkoutBtn').addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showToast('購物車目前是空的！');
+                    return;
+                }
+                showToast('正在前往加密尊榮結帳頁面...');
+            });
+        }
+    </script>
+</body>
+</html>
