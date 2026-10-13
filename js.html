@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE PARFUM | 頂級高級訂製香氛</title>
+    
+    <!-- External Libraries: Three.js (3D/Particles) & GSAP (Pro Physics Animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --bg-obsidian: #08080A;
+            --bg-card: #121216;
+            --bg-card-hover: #1A1A22;
+            --gold-light: #FFF2C6;
+            --gold-primary: #D4AF37;
+            --gold-dark: #8C6F12;
+            --gold-glow: rgba(212, 175, 55, 0.6);
+            --text-champagne: #F9F6F0;
+            --text-muted: #9E9EA8;
+            --border-gold: rgba(212, 175, 55, 0.25);
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: var(--text-champagne);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fullscreen WebGL Particle Canvas Background Overlay */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Typography */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigation Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 85px;
+            background: rgba(8, 8, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-gold);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+        }
+
+        .brand-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .brand-logo h1 {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            letter-spacing: 0.25em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .brand-logo span {
+            font-size: 0.55rem;
+            letter-spacing: 0.45em;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            margin-top: -3px;
+        }
+
+        /* Cart Trigger Icon with Shockwave Ring Element */
+        .cart-btn-wrapper {
+            position: relative;
+        }
+
+        .cart-icon-btn {
+            position: relative;
+            background: rgba(20, 20, 26, 0.8);
+            border: 1px solid var(--border-gold);
+            color: var(--text-champagne);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .cart-icon-btn:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .cart-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+            color: #000;
+            font-weight: 800;
+            font-size: 0.75rem;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+        }
+
+        /* Shockwave Ring Layer */
+        .shockwave-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-primary);
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Hero Banner */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 130px 20px 40px;
+            background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(8, 8, 10, 1) 75%);
+        }
+
+        .hero-tag {
+            border: 1px solid var(--border-gold);
+            background: rgba(212, 175, 55, 0.08);
+            color: var(--gold-light);
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .hero h2 {
+            font-family: var(--font-serif);
+            font-size: 3.2rem;
+            font-weight: 400;
+            line-height: 1.25;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            max-width: 620px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Products Grid */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 20px 120px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h3 {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 400;
+        }
+
+        .section-title .divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            margin: 15px auto 0;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 32px;
+        }
+
+        /* 3D Glass Product Card */
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) rotateX(2deg) rotateY(-1deg);
+            border-color: rgba(212, 175, 55, 0.7);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.25);
+        }
+
+        .card-img-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            overflow: hidden;
+            background: #101014;
+        }
+
+        .card-img-wrap img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-card:hover .card-img-wrap img {
+            transform: scale(1.08);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(8, 8, 10, 0.85);
+            border: 1px solid var(--border-gold);
+            color: var(--gold-primary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.15em;
+        }
+
+        .card-content {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-style-tag {
+            font-size: 0.7rem;
+            color: var(--gold-primary);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-champagne);
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .card-desc {
+            font-size: 0.82rem;
+            color: #A5A5B0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 18px;
+        }
+
+        .card-price {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold-light);
+        }
+
+        /* Super Cool Add to Cart Button */
+        .add-cart-btn {
+            position: relative;
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-cart-btn:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.7);
+            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 100%);
+        }
+
+        /* 3D Flying Arc & Motion Trail Elements */
+        .flying-3d-clone {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 30px var(--gold-glow), 0 0 60px rgba(212, 175, 55, 0.8);
+            border: 2px solid var(--gold-primary);
+        }
+
+        .motion-trail-spark {
+            position: fixed;
+            z-index: 9998;
+            pointer-events: none;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #FFF2C6 0%, #D4AF37 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--gold-primary);
+        }
+
+        /* Cart Drawer Slide Panel */
+        .cart-drawer-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .cart-drawer-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 440px;
+            height: 100%;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-gold);
+            z-index: 201;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-drawer.active {
+            transform: translateX(0);
+        }
+
+        .cart-header {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h4 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--text-champagne);
+        }
+
+        .close-cart-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-cart-btn:hover {
+            color: var(--gold-primary);
+        }
+
+        .cart-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: var(--text-muted);
+            margin: auto 0;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .cart-item img {
+            width: 65px;
+            height: 65px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .cart-item-price {
+            font-size: 0.85rem;
+            color: var(--gold-primary);
+            margin-top: 2px;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .qty-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cart-footer {
+            padding: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(8, 8, 10, 0.7);
+        }
+
+        .cart-total-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: #000;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkout-btn:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Toast Container */
+        .toast-box {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast-item {
+            background: rgba(18, 18, 22, 0.95);
+            border: 1px solid var(--gold-primary);
+            color: var(--text-champagne);
+            padding: 16px 24px;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(50px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast-item.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-gold);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Navigation Header -->
+    <header>
+        <a href="#" class="brand-logo">
+            <h1 class="gold-gradient-text">LUXE PARFUM</h1>
+            <span>HAUTE PARFUMERIE</span>
+        </a>
+
+        <div class="cart-btn-wrapper">
+            <div class="shockwave-ring" id="shockwaveRing"></div>
+            <button class="cart-icon-btn" id="cartTrigger" aria-label="開啟購物車">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/>
+                </svg>
+                <span class="cart-badge" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Header -->
+    <section class="hero">
+        <div class="hero-tag">法國高級訂製香氛系列</div>
+        <h2>凝結時光的 <br><span class="gold-gradient-text">靈魂香氣</span></h2>
+        <p>嚴選珍稀植物與木質原精，以三維高科技調香藝術呈獻獨家香氛符號。</p>
+    </section>
+
+    <!-- Main Products Collection -->
+    <main class="container">
+        <div class="section-title">
+            <h3>全系列十款經典香氛</h3>
+            <div class="divider"></div>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+            <!-- Injected dynamically via JS -->
+        </div>
+    </main>
+
+    <!-- Cart Drawer Modal -->
+    <div class="cart-drawer-backdrop" id="cartBackdrop"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h4>您的購物車</h4>
+            <button class="close-cart-btn" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <div class="cart-empty">購物車目前是空的</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total-flex">
+                <span>總計 Total</span>
+                <span class="gold-gradient-text" id="cartTotal" style="font-weight:700;">NT$ 0</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">尊榮結帳</button>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div class="toast-box" id="toastBox"></div>
+
+    <footer>
+        <p>&copy; 2026 LUXE PARFUM Haute Parfumerie. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 10 Fragrances Data
+        const perfumes = [
+            { id: '01', num: 'No. 01', name: '晨曦白茶', enName: 'Morning White Tea', style: '清新綠意花香調', price: 4800, desc: '採摘自高山微露的白茶嫩芽。清新優雅茶香伴隨茉莉，沉澱於雪松之中。', img: 'images/01.jpg' },
+            { id: '02', num: 'No. 02', name: '煙燻烏木', enName: 'Smokey Oud', style: '深邃木質東方調', price: 6200, desc: '珍稀烏木與大馬士革玫瑰共舞。溫暖煙燻質感，散發成熟貴族氣息。', img: 'images/02.jpg' },
+            { id: '03', num: 'No. 03', name: '絲絨暮玫瑰', enName: 'Velvet Twilight Rose', style: '奢華花香木質調', price: 5500, desc: '夜幕低垂時的奢華浪漫。微醺果香搭配廣藿香與深沉玫瑰。', img: 'images/03.jpg' },
+            { id: '04', num: 'No. 04', name: '蔚藍海岸', enName: 'French Riviera', style: '清爽海洋柑橘調', price: 4600, desc: '南法蔚藍海岸的海风。西西里檸檬與海鹽，伴隨漂流木香氣。', img: 'images/04.jpg' },
+            { id: '05', num: 'No. 05', name: '無花果與冷杉', enName: 'Fig & Siberian Fir', style: '綠意果香木質調', price: 4900, desc: '微涼森林的陽光，多汁無花果伴隨乳香與冷杉木完美融合。', img: 'images/05.jpg' },
+            { id: '06', num: 'No. 06', name: '金燦琥珀', enName: 'Solar Amber & Cashmere', style: '溫柔琥珀木質調', price: 5200, desc: '純羊絨毛衣般的舒適感。暖陽琥珀交織柔和木質，宛如貼膚體香。', img: 'images/06.jpg' },
+            { id: '07', num: 'No. 07', name: '黑夜鳶尾', enName: 'Midnight Iris', style: '優雅粉香花香調', price: 5800, desc: '佛羅倫斯珍稀鳶尾根，帶有精緻微粉質香氣與輕柔麂皮質感。', img: 'images/07.jpg' },
+            { id: '08', num: 'No. 08', name: '微醺香草', enName: 'Bourbon Vanilla & Rum', style: '美食東方調', price: 5400, desc: '香甜濃郁波本香草浸潤在蘭姆酒與肉桂香氣中，帶來誘人微醺感。', img: 'images/08.jpg' },
+            { id: '09', num: 'No. 09', name: '晨露橙花', enName: 'Dewy Neroli', style: '明亮白花香調', price: 4500, desc: '清晨微露下的純白橙花，清新乾淨、明亮動人，散發純真氣息。', img: 'images/09.jpg' },
+            { id: '10', num: 'No. 10', name: '冷冽大地', enName: 'Alpine Vetiver', style: '干爽辛香木質調', price: 5100, desc: '高山上的冷冽空氣與岩石。杜松子引出香根草，展現理性氣場。', img: 'images/10.jpg' }
+        ];
+
+        // Canvas 2D Dynamic Luxury Fallback Image Generator
+        function generateCanvasFallback(name) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            // Dark Obsidian Gradient Background
+            const grad = ctx.createRadialGradient(200, 200, 20, 200, 200, 220);
+            grad.addColorStop(0, '#1E1E26');
+            grad.addColorStop(1, '#0A0A0E');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 400, 400);
+
+            // Gold Ring
+            ctx.strokeStyle = '#D4AF37';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(200, 200, 130, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Perfume Silhouette Bottle Outline
+            ctx.strokeRect(150, 120, 100, 160);
+            ctx.strokeRect(175, 95, 50, 25);
+
+            // Title
+            ctx.fillStyle = '#F9F6F0';
+            ctx.font = '20px Playfair Display, serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(name, 200, 210);
+
+            return canvas.toDataURL();
+        }
+
+        // Global State
+        let cart = [];
+
+        // DOM Loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGrid();
+            initThreeCanvasParticles();
+            setupCartEvents();
+        });
+
+        // Render Cards
+        function renderGrid() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            perfumes.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="card-img-wrap">
+                        <img src="${p.img}" onerror="this.src='${generateCanvasFallback(p.name)}'" alt="${p.name}">
+                        <span class="card-badge">${p.num}</span>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <div class="card-style-tag">${p.style}</div>
+                            <h4 class="card-title">${p.name}</h4>
+                            <div class="card-subtitle">${p.enName}</div>
+                            <p class="card-desc">${p.desc}</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-price">NT$ ${p.price.toLocaleString()}</div>
+                            <button class="add-cart-btn" onclick="triggerSuperAddToCart(event, '${p.id}')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
+                                加入購物車
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ★ SUPER COOL 3D & CANVAS PARTICLE EFFECT LOGIC ★
+        function triggerSuperAddToCart(event, id) {
+            const perfume = perfumes.find(p => p.id === id);
+            if (!perfume) return;
+
+            const btn = event.currentTarget;
+            const card = btn.closest('.product-card');
+            const imgElem = card.querySelector('img');
+            const cartBtn = document.getElementById('cartTrigger');
+            const ring = document.getElementById('shockwaveRing');
+
+            const btnRect = btn.getBoundingClientRect();
+            const imgRect = imgElem.getBoundingClientRect();
+            const cartRect = cartBtn.getBoundingClientRect();
+
+            // 1. WebGL/Canvas Gold Dust Sparkle Burst at click position
+            explodeGoldParticles(event.clientX, event.clientY);
+
+            // 2. Create 3D Parabolic Flying Clone with Motion Trail
+            const clone = document.createElement('div');
+            clone.className = 'flying-3d-clone';
+            clone.style.width = `${imgRect.width}px`;
+            clone.style.height = `${imgRect.height}px`;
+            clone.style.left = `${imgRect.left}px`;
+            clone.style.top = `${imgRect.top}px`;
+            
+            const cloneImg = document.createElement('img');
+            cloneImg.src = imgElem.src;
+            cloneImg.style.width = '100%';
+            cloneImg.style.height = '100%';
+            cloneImg.style.objectFit = 'cover';
+            clone.appendChild(cloneImg);
+
+            document.body.appendChild(clone);
+
+            // Calculate Bézier Parabola Control Points
+            const startX = imgRect.left;
+            const startY = imgRect.top;
+            const endX = cartRect.left + cartRect.width / 2 - 25;
+            const endY = cartRect.top + cartRect.height / 2 - 25;
+
+            // Control Point for Curve Arc
+            const controlX = (startX + endX) / 2 + 100;
+            const controlY = Math.min(startY, endY) - 180;
+
+            const flightPath = { progress: 0 };
+
+            // Motion Trail Generator Interval
+            const trailInterval = setInterval(() => {
+                const rect = clone.getBoundingClientRect();
+                createTrailSpark(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            }, 30);
+
+            // GSAP 3D Arc Flight Animation
+            gsap.to(flightPath, {
+                progress: 1,
+                duration: 0.95,
+                ease: "power3.inOut",
+                onUpdate: () => {
+                    const t = flightPath.progress;
+                    // Quadratic Bezier Formula
+                    const x = (1 - t) * (1 - t) * startX + 2 * (1 - t) * t * controlX + t * t * endX;
+                    const y = (1 - t) * (1 - t) * startY + 2 * (1 - t) * t * controlY + t * t * endY;
+                    
+                    const scale = 1 - t * 0.85;
+                    const rotateX = t * 720;
+                    const rotateY = t * 360;
+
+                    clone.style.left = `${x}px`;
+                    clone.style.top = `${y}px`;
+                    clone.style.transform = `scale(${scale}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                },
+                onComplete: () => {
+                    clearInterval(trailInterval);
+                    clone.remove();
+
+                    // 3. Shockwave & Cart Impact Response
+                    triggerShockwaveImpact(ring, cartBtn);
+
+                    // Add to Cart Logic
+                    const existing = cart.find(item => item.id === id);
+                    if (existing) {
+                        existing.qty += 1;
+                    } else {
+                        cart.push({ ...perfume, qty: 1 });
+                    }
+
+                    updateCartUI();
+                    showToast(`已成功加入「${perfume.name}」到購物車！`);
+                }
+            });
+        }
+
+        // Motion Trail Particle
+        function createTrailSpark(x, y) {
+            const spark = document.createElement('div');
+            spark.className = 'motion-trail-spark';
+            spark.style.left = `${x}px`;
+            spark.style.top = `${y}px`;
+            document.body.appendChild(spark);
+
+            gsap.to(spark, {
+                scale: 0.1,
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => spark.remove()
+            });
+        }
+
+        // Cart Shockwave Impact
+        function triggerShockwaveImpact(ring, cartBtn) {
+            // Ring Shockwave
+            gsap.fromTo(ring, 
+                { scale: 1, opacity: 1 },
+                { scale: 3.2, opacity: 0, duration: 0.7, ease: "power2.out" }
+            );
+
+            // 3D Cart Bounce
+            gsap.timeline()
+                .to(cartBtn, { scale: 1.4, rotate: -15, duration: 0.15 })
+                .to(cartBtn, { scale: 0.9, rotate: 10, duration: 0.15 })
+                .to(cartBtn, { scale: 1, rotate: 0, duration: 0.2 });
+        }
+
+        // Fullscreen 2D/3D Particle Burst Engine
+        let particleEngine = [];
+        function initThreeCanvasParticles() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function loop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = particleEngine.length - 1; i >= 0; i--) {
+                    const p = particleEngine[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.15; // Gravity
+                    p.life -= p.decay;
+                    p.size *= 0.98;
+
+                    ctx.save();
+                    ctx.globalAlpha = Math.max(0, p.life);
+                    ctx.fillStyle = p.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#D4AF37';
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, Math.max(1, p.size), 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+
+                    if (p.life <= 0) {
+                        particleEngine.splice(i, 1);
+                    }
+                }
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        function explodeGoldParticles(originX, originY) {
+            const colors = ['#FFF2C6', '#D4AF37', '#997A15', '#FFFFFF'];
+            for (let i = 0; i < 90; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 4 + Math.random() * 12;
+                particleEngine.push({
+                    x: originX,
+                    y: originY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: 2 + Math.random() * 5,
+                    life: 1,
+                    decay: 0.015 + Math.random() * 0.02,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+        }
+
+        // Cart Drawer Operations
+        function updateCartUI() {
+            const badge = document.getElementById('cartCount');
+            const body = document.getElementById('cartBody');
+            const totalElem = document.getElementById('cartTotal');
+
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+            badge.innerText = totalQty;
+
+            if (cart.length === 0) {
+                body.innerHTML = `<div class="cart-empty">購物車目前是空的</div>`;
+            } else {
+                body.innerHTML = '';
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'cart-item';
+                    row.innerHTML = `
+                        <img src="${item.img}" onerror="this.src='${generateCanvasFallback(item.name)}'">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">NT$ ${item.price.toLocaleString()}</div>
+                            <div class="cart-item-controls">
+                                <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                    body.appendChild(row);
+                });
+            }
+
+            totalElem.innerText = `NT$ ${totalPrice.toLocaleString()}`;
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            updateCartUI();
+        }
+
+        function setupCartEvents() {
+            const trigger = document.getElementById('cartTrigger');
+            const closeBtn = document.getElementById('closeCart');
+            const backdrop = document.getElementById('cartBackdrop');
+            const drawer = document.getElementById('cartDrawer');
+
+            function openDrawer() {
+                drawer.classList.add('active');
+                backdrop.classList.add('active');
+            }
+
+            function closeDrawer() {
+                drawer.classList.remove('active');
+                backdrop.classList.remove('active');
+            }
+
+            trigger.addEventListener('click', openDrawer);
+            closeBtn.addEventListener('click', closeDrawer);
+            backdrop.addEventListener('click', closeDrawer);
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toastBox');
+            const toast = document.createElement('div');
+            toast.className = 'toast-item';
+            toast.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#D4AF37"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span>${msg}</span>
+            `;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast('購物車內尚無商品！');
+                return;
+            }
+            showToast('感謝預訂！正在導向加密尊榮結帳頁面...');
+        }
+    </script>
+</body>
+</html>
